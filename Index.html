@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="PotatoClicker.css">
+    <title>Potato Clicker</title>
+</head>
+<body>
+    <div class="game-container">
+        <div id="click-counter">0</div>
+        <img id="potato-image" src=".1705693165372.png" alt="Potato" onclick="incrementCounter()">
+        <div id="upgrade-container">
+            <div id="upgrade-bar-container">
+                <div id="upgrade-bar"></div>
+            </div>
+            <div id="upgrade-button" onclick="upgradeClicks()">Upgrade</div>
+            <div id="upgrade-cost">Cost: 10 clicks</div>
+        </div>
+        <div id="potato-type">Basic Potato</div>
+        <div id="coin-container">
+            <img id="coin-image" src=".BatataFrita.png" alt="Coin">
+            <div id="coin-counter">0</div>
+        </div>
+    </div>
+    <script>
+        let clickCounter = 0;
+        let clickMultiplier = 1;
+        let upgradeCost = 10;
+        let upgradeProgress = 0;
+        let coinCounter = 0;
+
+        function incrementCounter() {
+            clickCounter += clickMultiplier;
+            animatePotato();
+            updateCounter();
+            updateUpgradeBar();
+            updateCoinCounter();
+        }
+
+        function upgradeClicks() {
+            if (clickCounter >= upgradeCost) {
+                clickCounter -= upgradeCost;
+                clickMultiplier *= 2;
+                upgradeCost = Math.ceil(upgradeCost * 10);
+                upgradeProgress = 0;
+                updateCounter();
+                updateUpgradeCost();
+                updateUpgradeBar();
+                unlockPotatoType();
+                animateUpgradeButton();
+            } else {
+                alert("VocÃª precisa de mais cliques para fazer o upgrade!");
+            }
+        }
+
+        function updateCounter() {
+            document.getElementById("click-counter").innerText = clickCounter;
+        }
+
+        function updateUpgradeCost() {
+            document.getElementById("upgrade-cost").innerText = `Cost: ${upgradeCost} clicks`;
+        }
+
+        function updateUpgradeBar() {
+            const upgradeBar = document.getElementById("upgrade-bar");
+            const maxProgress = upgradeCost;
+            upgradeProgress = Math.min(upgradeProgress + clickMultiplier, maxProgress);
+            const progressPercentage = (upgradeProgress / maxProgress) * 100;
+            upgradeBar.style.width = `${progressPercentage}%`;
+        }
+
+        function unlockPotatoType() {
+            if (clickMultiplier === 2) {
+                document.getElementById("potato-type").innerText = "Super Potato";
+                animatePotatoType();
+            } else if (clickMultiplier === 4) {
+                document.getElementById("potato-type").innerText = "Mega Potato";
+                animatePotatoType();
+            }
+        }
+
+        function animatePotato() {
+            const potatoImage = document.getElementById("potato-image");
+            potatoImage.style.transform = "scale(1.2)";
+            setTimeout(() => {
+                potatoImage.style.transform = "scale(1)";
+            }, 200);
+            updateCounter();
+        }
+
+        function animateUpgradeButton() {
+            const upgradeButton = document.getElementById("upgrade-button");
+            upgradeButton.style.transform = "scale(1.2)";
+            setTimeout(() => {
+                upgradeButton.style.transform = "scale(1)";
+            }, 200);
+        }
+
+        function animatePotatoType() {
+            const potatoType = document.getElementById("potato-type");
+            potatoType.style.opacity = 1;
+            setTimeout(() => {
+                potatoType.style.opacity = 0;
+            }, 1000);
+        }
+
+        function updateCoinCounter() {
+            coinCounter += clickMultiplier;
+            document.getElementById("coin-counter").innerText = coinCounter;
+        }
+    </script>
+</body>
+</html>
